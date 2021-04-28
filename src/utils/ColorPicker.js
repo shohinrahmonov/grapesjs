@@ -19,7 +19,7 @@ export default function($, undefined) {
       // Options
       color: false,
       flat: false,
-      showInput: false,
+      showInput: true,
       allowEmpty: false,
       showButtons: true,
       clickoutFiresChange: true,
@@ -94,6 +94,10 @@ export default function($, undefined) {
 
       return [
         "<div class='sp-container sp-hidden'>",
+        "<div class='sp-button-container sp-cf sp-b-c'>",
+        "<button type='button' class='sp-choose'></button>",
+        "<a class='sp-cancel' href='#'>Reset</a>",
+        '</div>',
         "<div class='sp-palette-container'>",
         "<div class='sp-palette sp-thumb sp-cf'></div>",
         "<div class='sp-palette-button-container sp-cf'>",
@@ -120,14 +124,13 @@ export default function($, undefined) {
         '</div>',
         "<div class='sp-alpha'><div class='sp-alpha-inner'><div class='sp-alpha-handle'></div></div></div>",
         '</div>',
+        "<div class='sp-dropdown-custom'>",
+        "<select class='change-format'><option value='rgb'>Rgb</option><option value='hex'>Hex</option></select>",
         "<div class='sp-input-container sp-cf'>",
         "<input class='sp-input' type='text' spellcheck='false'  />",
         '</div>',
-        "<div class='sp-initial sp-thumb sp-cf'></div>",
-        "<div class='sp-button-container sp-cf'>",
-        "<a class='sp-cancel' href='#'></a>",
-        "<button type='button' class='sp-choose'></button>",
         '</div>',
+        "<div class='sp-initial sp-thumb sp-cf'></div>",
         '</div>',
         '</div>'
       ].join('');
@@ -153,9 +156,9 @@ export default function($, undefined) {
             formattedString +
             '" data-color="' +
             tiny.toRgbString() +
-            '" class="' +
+            '" class="sp-rounded-in ' +
             c +
-            '"><span class="sp-thumb-inner" style="' +
+            '"><span class="sp-thumb-inner sp-rounded-in " style="' +
             swatchStyle +
             ';"></span></span>'
         );
@@ -241,6 +244,7 @@ export default function($, undefined) {
       alphaSlider = container.find('.sp-alpha'),
       alphaSlideHelper = container.find('.sp-alpha-handle'),
       textInput = container.find('.sp-input'),
+      formatListener = container.find('.change-format'),
       paletteContainer = container.find('.sp-palette'),
       initialColorContainer = container.find('.sp-initial'),
       cancelButton = container.find('.sp-cancel'),
@@ -355,7 +359,7 @@ export default function($, undefined) {
 
       // Prevent clicks from bubbling up to document.  This would cause it to be hidden.
       container.click(stopPropagation);
-
+      formatListener.change(setFromDropdownFormat);
       // Handle user typed input
       textInput.change(setFromTextInput);
       textInput.bind('paste', function() {
@@ -367,12 +371,13 @@ export default function($, undefined) {
         }
       });
 
-      cancelButton.text(opts.cancelText);
+      cancelButton.text('Reset');
       cancelButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
         revert();
         hide();
+        formatListener.val(currentPreferredFormat);
       });
 
       clearButton.attr('title', opts.clearText);
@@ -388,11 +393,12 @@ export default function($, undefined) {
         }
       });
 
-      chooseButton.text(opts.chooseText);
+      // SET THE CHOOSE BTN TO SAVE PERMENT
+      chooseButton.text('Save');
       chooseButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
-
+        formatListener.val(currentPreferredFormat);
         if (IE && textInput.is(':focus')) {
           textInput.trigger('change');
         }
@@ -549,7 +555,25 @@ export default function($, undefined) {
         paletteElementClick
       );
     }
+    function setFromDropdownFormat() {
+      var value = formatListener.val();
+      console.log('chaning', value);
+      currentPreferredFormat = value;
+      var color = get(),
+        displayColor = '',
+        hasChanged = !tinycolor.equals(color, colorOnShow);
+      if (color) {
+        displayColor = color.toString(currentPreferredFormat);
+      }
+      if (isInput) {
+        boundElement.val(displayColor);
+      }
 
+      // if (hasChanged) {
+      // callbacks.change(color);
+      boundElement.trigger('change', [color]);
+      // }
+    }
     function updateSelectionPaletteFromStorage() {
       if (localStorageKey && window.localStorage) {
         // Migrate old palettes over to new format.  May want to remove this eventually.
@@ -659,6 +683,27 @@ export default function($, undefined) {
       isDragging = false;
       container.removeClass(draggingClass);
       boundElement.trigger('dragstop.spectrum', [get()]);
+      setFromDropdownFormat();
+      // formatListener.val(currentPreferredFormat);
+      // updateOriginalInputWithoutSavingToPall(true);
+    }
+    function updateOriginalInputWithoutSavingToPall(fireCallback) {
+      var color = get(),
+        displayColor = '',
+        hasChanged = !tinycolor.equals(color, colorOnShow);
+      setFromDropdownFormat();
+      if (color) {
+        displayColor = color.toString(currentPreferredFormat);
+      }
+
+      if (isInput) {
+        boundElement.val(displayColor);
+      }
+
+      if (fireCallback && hasChanged) {
+        callbacks.change(color);
+        boundElement.trigger('change', [color]);
+      }
     }
 
     function setFromTextInput() {
@@ -767,6 +812,11 @@ export default function($, undefined) {
 
     function revert() {
       set(colorOnShow, true);
+      var color = get();
+
+      boundElement.val(selectionPalette[1]);
+      callbacks.change(color);
+      boundElement.trigger('change', [color]);
     }
 
     function set(color, ignoreFormatChange) {
@@ -839,7 +889,7 @@ export default function($, undefined) {
       var format = currentPreferredFormat;
       if (currentAlpha < 1 && !(currentAlpha === 0 && format === 'name')) {
         if (
-          format === 'hex' ||
+          // format === "hex" ||
           format === 'hex3' ||
           format === 'hex6' ||
           format === 'name'
