@@ -86,8 +86,8 @@ export default Input.extend({
         maxSelectionSize: 8,
         showPalette: true,
         showAlpha: true,
-        chooseText: 'Ok',
-        cancelText: '⨯',
+        chooseText: 'Save',
+        cancelText: 'Reset',
         palette: [],
 
         // config expanded here so that the functions below are not overridden
