@@ -371,7 +371,7 @@ export default function($, undefined) {
         }
       });
 
-      cancelButton.text(opts.cancelText);
+      cancelButton.text('Reset');
       cancelButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -394,7 +394,7 @@ export default function($, undefined) {
       });
 
       // SET THE CHOOSE BTN TO SAVE PERMENT
-      chooseButton.text(opts.chooseText);
+      chooseButton.text('Save');
       chooseButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -557,6 +557,7 @@ export default function($, undefined) {
     }
     function setFromDropdownFormat() {
       var value = formatListener.val();
+      console.log('chaning', value);
       currentPreferredFormat = value;
       var color = get(),
         displayColor = '',
