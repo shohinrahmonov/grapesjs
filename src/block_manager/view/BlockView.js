@@ -142,6 +142,7 @@ export default Backbone.View.extend({
     const { em, el, $el, ppfx, model } = this;
     const disable = model.get('disable');
     const attr = model.get('attributes') || {};
+    const aimId = attr.aimId || 'default';
     const cls = attr.class || '';
     const className = `${ppfx}block`;
     const label =
