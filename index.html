@@ -171,6 +171,13 @@
         attributes: { class: "gjs-fonts gjs-f-b1", aimId: "newOne" },
         content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
       });
+      editor.BlockManager.add("testBlock1", {
+        label: "Block1",
+        attributes: { class: "gjs-fonts gjs-f-b1", aimId: "two" },
+        content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
+      });
+      const all = editor.BlockManager.getAll();
+      console.log({ all });
     </script>
   </body>
 </html>
