@@ -69,7 +69,6 @@ export default Backbone.View.extend({
     this.activeTextModel = null;
 
     if (this.em && this.em.on) {
-      this.em.on('change:canvasOffset', this.updateOffset);
       this.updateOffset();
     }
   },
@@ -323,7 +322,6 @@ export default Backbone.View.extend({
       srcModel && srcModel.set && srcModel.set('status', 'freezed');
       this.srcModel = srcModel;
     }
-
     on(container, 'mousemove dragover', this.onMove);
     on(docs, 'mouseup dragend touchend', this.endMove);
     on(docs, 'keydown', this.rollback);
@@ -428,11 +426,16 @@ export default Backbone.View.extend({
     const ev = e;
     const { em, onMoveClb, plh } = this;
     this.moved = 1;
-
     // Turn placeholder visibile
     var dsp = plh.style.display;
     if (!dsp || dsp === 'none') plh.style.display = 'block';
-
+    // console.log("this", this);
+    // console.log({ ev });
+    var poz = this.getDim(this.eV);
+    // console.log("poz[2]", poz[2]);
+    // console.log(this.eV);
+    plh.children[0].style.height = poz[2] + 'px';
+    plh.children[0].style.width = poz[3] + 'px';
     // Cache all necessary positions
     var eO = this.offset(this.el);
     this.elT = this.wmargin ? Math.abs(eO.top) : eO.top;
