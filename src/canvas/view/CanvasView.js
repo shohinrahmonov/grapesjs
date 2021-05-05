@@ -174,7 +174,9 @@ export default Backbone.View.extend({
    */
   offset(el, opts = {}) {
     const rect = getElRect(el);
-    const docBody = el.ownerDocument.body;
+    if (el) {
+      var docBody = el.ownerDocument.body;
+    }
     const { noScroll } = opts;
 
     return {

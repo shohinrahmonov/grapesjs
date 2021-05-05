@@ -261,7 +261,9 @@ export default Backbone.View.extend({
    * @return {Object}
    */
   offset(el) {
-    var rect = el.getBoundingClientRect();
+    if (el) {
+      var rect = el.getBoundingClientRect();
+    }
     return {
       top: rect.top + document.body.scrollTop,
       left: rect.left + document.body.scrollLeft
@@ -429,13 +431,21 @@ export default Backbone.View.extend({
     // Turn placeholder visibile
     var dsp = plh.style.display;
     if (!dsp || dsp === 'none') plh.style.display = 'block';
-    // console.log("this", this);
-    // console.log({ ev });
+
     var poz = this.getDim(this.eV);
-    // console.log("poz[2]", poz[2]);
-    // console.log(this.eV);
     plh.children[0].style.height = poz[2] + 'px';
-    plh.children[0].style.width = poz[3] + 'px';
+    // const elmentA = this.eV.innerHTML;
+    // const elmentAVClass = this.eV.classList.value;
+    // Get the name of all the classes of selected element
+    // const classSe = elmentAVClass.split(" ");
+    // var itsz = plh.children[0];
+    // var z = document.createElement("div");
+    // z.classList.add("placeholder-inner");
+    // z.classList.add("placeholder-inner", ...classSe);
+    // z.innerHTML = elmentA;
+    // if (itsz.children.length < 1) {
+    //   itsz.append(z);
+    // }
     // Cache all necessary positions
     var eO = this.offset(this.el);
     this.elT = this.wmargin ? Math.abs(eO.top) : eO.top;
@@ -1038,10 +1048,18 @@ export default Backbone.View.extend({
     const docs = this.getDocuments();
     const container = this.getContainerEl();
     const onEndMove = this.onEndMove;
-    const { target, lastPos } = this;
+    const { target, lastPos, plh } = this;
     let srcModel;
     off(container, 'mousemove dragover', this.onMove);
     off(docs, 'mouseup dragend touchend', this.endMove);
+
+    // Remove the placeholder
+    // const itsz = plh.children[0];
+    // itsz.innerHTML = "";
+    // if (itsz.children.length < 1) {
+    //   itsz.innerHTML = "";
+    // }
+
     off(docs, 'keydown', this.rollback);
     this.plh.style.display = 'none';
 
