@@ -360,6 +360,10 @@ div.#{$com-prefix}hover-move {
   border-color: transparent;
   border-width: 5px 3px;
   margin: 0 0 0 -3px;
+  .#{$nv-prefix}placeholder-int {
+    padding: 0;
+    border-width: 1px;
+  }
 }
 .placeholder-inner {
   width: 100%;

@@ -433,7 +433,8 @@ export default Backbone.View.extend({
     if (!dsp || dsp === 'none') plh.style.display = 'block';
 
     var poz = this.getDim(this.eV);
-    plh.children[0].style.height = poz[2] + 'px';
+    let heightEl = poz[2] || 50;
+    plh.children[0].style.height = heightEl + 'px';
     // const elmentA = this.eV.innerHTML;
     // const elmentAVClass = this.eV.classList.value;
     // Get the name of all the classes of selected element

@@ -73,7 +73,8 @@ export default Backbone.View.extend({
   },
 
   onMove(e) {
-    this.em.trigger('block:drag:move', e);
+    console.log(this.em);
+    this.em && this.em.trigger('block:drag:move', e);
   },
 
   /**

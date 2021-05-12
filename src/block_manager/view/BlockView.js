@@ -69,7 +69,7 @@ export default Backbone.View.extend({
     const sorter = config.getSorter();
     sorter.setDragHelper(this.el, e);
     sorter.setDropContent(this.model.get('content'));
-    sorter.startSort(this.el);
+    sorter.startSort(this.el, this);
     on(document, 'mouseup', this.endDrag);
   },
 
