@@ -67,7 +67,6 @@ export default Backbone.View.extend({
   checkSelected(component, opts = {}) {
     const { scroll } = opts;
     const currFrame = this.em.get('currentFrame');
-
     scroll &&
       component.views.forEach(view => {
         view._getFrame() !== currFrame && view.scrollIntoView(scroll);

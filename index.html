@@ -55,13 +55,17 @@
         font-size: 1rem;
         line-height: 1.5rem;
       }
+      .button {
+        background: springgreen;
+      }
     </style>
   </head>
 
   <body>
+    <button class="button" onclick="myFunction()">Append to block</button>
     <div id="gjs" style="height:0px; overflow:hidden;">
       <div class="panel">
-        <h1 class="welcome">Welcome to</h1>
+        <h1 class="welcome">Welcome to here</h1>
         <div class="big-title">
           <svg class="logo" viewBox="0 0 100 100">
             <path
@@ -220,6 +224,49 @@
         attributes: { class: "gjs-fonts gjs-f-b1", aimId: "two" },
         content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
       });
+      function myFunction() {
+        console.log("append");
+        // const selectedMain = editor.getSelected();
+        // const selected = editor.getSelected().getEl();
+        // console.log({ selected });
+        // selectedMain.set("tagName", "ul");
+        // // selectedMain.set("type", "test");
+        // selectedMain.addAttributes({ "data-gjs-type": "test" });
+        // selectedMain.addAttributes({ id: "2222" });
+        // selectedMain.set("editable", "false");
+        // selected.get(`components`).add("<li>tedt</li>");
+        // selected.append("<li>FOOOO</li>");
+        // const view = selected.view.el;
+        // const li = document.createElement('li');
+        // li.innerText = view.innerText;
+        // selected.set('tagName', 'ul');
+        //         selected.get('components').models[0].set('content', innerText);
+        // selected.get('components').models[0].set('type', 'text');
+        // selected.append(li.outerHTML);
+        // var list = document.getElementById("myList"); // Get the <ul> element to insert a new node
+        // console.log("nameOfItem: =>> ", selected);
+        // selected.append("<li>List</li>");
+        // selected.setAttribute("data-gjs-type", "text");
+        // selected.insertAdjacentHTML(
+        //   "beforeend",
+        //   '<li id="99939" class="gjs-no-pointer aim-button-inner-text" data-gjs-type="text">Insert your text here</li>'
+        // );
+        // selectedMain.addAttributes({ class: "noclass" });
+        const selected = editor.getSelected();
+        const view = selected.view.el;
+        let innerText = view.innerText;
+        selected.set("tagName", "ul");
+        selected.append(`<li></li>`);
+        selected.get("components").models[0].set("content", innerText);
+        selected.get("components").models[0].set("type", "text");
+        // var li = document.createElement("li");
+        // // li.setAttribute("data-gjs-type", "text");
+        // // li.appendChild(document.createTextNode("Element 4"));
+
+        // selected.innerHTML = "<li data-gjs-type='text'>Hi</li>";
+
+        // selected.appendChild(li);
+      }
     </script>
   </body>
 </html>
